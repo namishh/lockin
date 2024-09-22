@@ -34,6 +34,9 @@ export const usePlayerStore = create<PlayerState>((set) => ({
     "bRnTGwCbr3E", // Japan Cafe Vibe
     "S_MOd40zlYU", // Dark Ambient
     "Na0w3Mz46GA", // Asian Lofi Radio
+    "5yx6BWlEVcY", // Jazzy Hip Hop Beats
+    "tNkZsRW7h2c", // Space Ambient Music
+    "mwPR8aizAyo", // Coffee Shop Radio
   ],
   videoNames: [
     "Synthwave Radio - Lofi Girl",
@@ -44,6 +47,9 @@ export const usePlayerStore = create<PlayerState>((set) => ({
     "Japan Cafe Vibe - Healing Me",
     "Dark Ambient - Lofi Girl",
     "Asian Lofi Radio - Lofi Girl",
+    "Jazzy and lofi hip hop beats - Chillhop Music",
+    "Space Ambient Music - Relaxation Music",
+    "Coffee Shop Radio - STEEZYASF*CK",
   ],
 
   togglePlayPause: () => set((state) => ({ isPlaying: !state.isPlaying })),
@@ -53,7 +59,7 @@ export const usePlayerStore = create<PlayerState>((set) => ({
     set((state) => {
       let newImage;
       do {
-        newImage = Math.floor(Math.random() * 6) + 1;
+        newImage = Math.floor(Math.random() * 7) + 1;
       } while (newImage === state.image);
       return { image: newImage };
     });
@@ -68,9 +74,9 @@ export const usePlayerStore = create<PlayerState>((set) => ({
     })),
 
   setVideo: (videoId: number) =>
-   set(() => ({
-     currentVideoId: videoId,
-   })),
+    set(() => ({
+      currentVideoId: videoId,
+    })),
 
   previousVideo: () =>
     set((state) => ({
