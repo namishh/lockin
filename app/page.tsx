@@ -11,6 +11,8 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { useEffect, useState } from "react";
+import { Clock } from "lucide-react";
+import PomoTimer from "@/components/Pomo";
 
 export default function Home() {
   const {
@@ -37,6 +39,8 @@ export default function Home() {
       );
     }, 1000);
   });
+
+  const [pomo, openPomo] = useState(false);
 
   return (
     <div className="font-[family-name:var(--font-geist-sans)] flex h-screen w-screen  flex-col justify-between p-8">
@@ -73,6 +77,16 @@ export default function Home() {
             </SheetContent>
           </Sheet>
           <p className="text-4xl">{time}</p>
+        </div>
+        <div className="flex gap-4">
+          <div className="relative">
+            <Clock
+              onClick={() => openPomo(!pomo)}
+              size={24}
+              className="cursor-pointer"
+            />
+            {pomo && <PomoTimer />}
+          </div>
         </div>
       </div>
       <div className="flex justify-between">
