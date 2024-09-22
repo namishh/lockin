@@ -13,6 +13,7 @@ interface PlayerState {
   setVolume: (volume: number) => void;
   setImage: () => void;
   nextVideo: () => void;
+  setVideo: (videoId: number) => void;
   previousVideo: () => void;
   setLoading: (loading: boolean) => void;
 }
@@ -63,6 +64,12 @@ export const usePlayerStore = create<PlayerState>((set) => ({
           : state.currentVideoId + 1,
       isPlaying: true,
     })),
+
+  setVideo: (videoId: number) =>
+   set(() => ({
+     currentVideoId: videoId,
+   })),
+
   previousVideo: () =>
     set((state) => ({
       currentVideoId:

@@ -2,13 +2,48 @@
 import Player from "@/components/Player";
 import Image from "next/image";
 import { usePlayerStore } from "@/lib/store";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 
 export default function Home() {
-  const { image, loading, videoNames, currentVideoId } = usePlayerStore();
+  const { image, loading, videoNames, currentVideoId, setVideo, setImage } =
+    usePlayerStore();
   return (
     <div className="font-[family-name:var(--font-geist-sans)] flex h-screen w-screen  flex-col justify-between p-8">
       <div className="flex z-[10] justify-between">
-        <p>Now playing: {videoNames[currentVideoId]}</p>
+        <Sheet>
+          <SheetTrigger>Now playing: {videoNames[currentVideoId]}</SheetTrigger>
+          <SheetContent>
+            <SheetHeader>
+              <SheetTitle>Select Your Station</SheetTitle>
+              <SheetDescription>
+                Yea lmao, these are just hidden iframes from youtube.
+              </SheetDescription>
+              <div className="mt-2 flex items-start flex-col gap-4">
+                {videoNames.map((i, j) => {
+                  return (
+                    <button
+                      className="hover:text-neutral-500 transition"
+                      onClick={() => {
+                        setVideo(j);
+                        setImage();
+                      }}
+                      key={j}
+                    >
+                      {i}
+                    </button>
+                  );
+                })}
+              </div>
+            </SheetHeader>
+          </SheetContent>
+        </Sheet>
       </div>
       <div className="flex justify-between">
         <Player />

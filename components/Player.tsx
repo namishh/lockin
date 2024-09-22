@@ -3,6 +3,9 @@ import { useEffect, useRef } from "react";
 import { usePlayerStore } from "@/lib/store"; // import the Zustand store
 import { Button } from "./ui/button";
 import { Slider } from "./ui/slider";
+import { Headphones } from "lucide-react";
+
+import Visualizer from "./Visualizer";
 
 const Player: React.FC = () => {
   const playerRef = useRef<HTMLIFrameElement>(null);
@@ -114,6 +117,7 @@ const Player: React.FC = () => {
         />
       </div>
       <div className="flex gap-4">
+        <Visualizer />
         <Button
           disabled={loading}
           variant={"secondary"}
@@ -122,7 +126,8 @@ const Player: React.FC = () => {
           {isPlaying ? "Pause" : "Play"}
         </Button>
 
-        <div className="bg-primary flex items-center p-3">
+        <div className="bg-primary flex gap-4 items-center px-3">
+          <Headphones size={24} />
           <Slider
             disabled={loading}
             onValueChange={(i) => {
@@ -139,7 +144,7 @@ const Player: React.FC = () => {
               }
             }}
             min={0}
-            className="w-48"
+            className="w-36"
             value={[volume]}
             max={100}
             step={1}
