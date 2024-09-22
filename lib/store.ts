@@ -6,6 +6,7 @@ interface PlayerState {
   volume: number;
   currentVideoId: number;
   videoIds: string[];
+  videoNames: string[];
   loading: boolean;
 
   togglePlayPause: () => void;
@@ -22,7 +23,26 @@ export const usePlayerStore = create<PlayerState>((set) => ({
   image: 1,
   currentVideoId: 0,
   loading: true,
-  videoIds: ["4xDzrJKXOOY", "jfKfPfyJRdk", "7NOSDKb0HlU"],
+  videoIds: [
+    "4xDzrJKXOOY", // Synthwave Radio
+    "D58_3HqgRKA", // Purrple Cat Radio
+    "jfKfPfyJRdk", // Lofi Hip Hop Radio
+    "tGfQYbArQhc", // Jazz Lofi
+    "J2i0cZWCdq4", // Study Lofi
+    "bRnTGwCbr3E", // Japan Cafe Vibe
+    "S_MOd40zlYU", // Dark Ambient
+    "Na0w3Mz46GA", // Asian Lofi Radio
+  ],
+  videoNames: [
+    "Synthwave Radio - Lofi Girl",
+    "Purrple Cat Radio",
+    "Lofi Hip Hop Radio - Lofi Girl",
+    "Jazz Lofi - Abao In Tokyo",
+    "Study Lofi - Lofi Girl",
+    "Japan Cafe Vibe - Healing Me",
+    "Dark Ambient - Lofi Girl",
+    "Asian Lofi Radio - Lofi Girl",
+  ],
 
   togglePlayPause: () => set((state) => ({ isPlaying: !state.isPlaying })),
   setVolume: (volume: number) => set(() => ({ volume })),

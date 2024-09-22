@@ -3,7 +3,6 @@ import { useEffect, useRef } from "react";
 import { usePlayerStore } from "@/lib/store"; // import the Zustand store
 import { Button } from "./ui/button";
 import { Slider } from "./ui/slider";
-import { truncate } from "fs/promises";
 
 const Player: React.FC = () => {
   const playerRef = useRef<HTMLIFrameElement>(null);
