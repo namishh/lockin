@@ -10,40 +10,70 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { useEffect, useState } from "react";
 
 export default function Home() {
-  const { image, loading, videoNames, currentVideoId, setVideo, setImage } =
-    usePlayerStore();
+  const {
+    image,
+    loading,
+    videoNames,
+    currentVideoId,
+    setVideo,
+    setImage,
+    setPlaying,
+  } = usePlayerStore();
+
+  const [time, setTime] = useState(
+    new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+  );
+  
+  useEffect(() => {
+    setInterval(() => {
+      setTime(
+        new Date().toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+        }),
+      );
+    }, 1000)
+  })
+
   return (
     <div className="font-[family-name:var(--font-geist-sans)] flex h-screen w-screen  flex-col justify-between p-8">
       <div className="flex z-[10] justify-between">
-        <Sheet>
-          <SheetTrigger>Now playing: {videoNames[currentVideoId]}</SheetTrigger>
-          <SheetContent>
-            <SheetHeader>
-              <SheetTitle>Select Your Station</SheetTitle>
-              <SheetDescription>
-                Yea lmao, these are just hidden iframes from youtube.
-              </SheetDescription>
-              <div className="mt-2 flex items-start flex-col gap-4">
-                {videoNames.map((i, j) => {
-                  return (
-                    <button
-                      className="hover:text-neutral-500 transition"
-                      onClick={() => {
-                        setVideo(j);
-                        setImage();
-                      }}
-                      key={j}
-                    >
-                      {i}
-                    </button>
-                  );
-                })}
-              </div>
-            </SheetHeader>
-          </SheetContent>
-        </Sheet>
+        <div className="flex flex-col gap-4">
+          <Sheet>
+            <SheetTrigger>
+              Now playing: {videoNames[currentVideoId]}
+            </SheetTrigger>
+            <SheetContent>
+              <SheetHeader>
+                <SheetTitle>Select Your Station</SheetTitle>
+                <SheetDescription>
+                  Yea lmao, these are just hidden iframes from youtube.
+                </SheetDescription>
+                <div className="mt-2 flex items-start flex-col gap-4">
+                  {videoNames.map((i, j) => {
+                    return (
+                      <button
+                        className="hover:text-neutral-500 transition"
+                        onClick={() => {
+                          setVideo(j);
+                          setImage();
+                          setPlaying(true);
+                        }}
+                        key={j}
+                      >
+                        {i}
+                      </button>
+                    );
+                  })}
+                </div>
+              </SheetHeader>
+            </SheetContent>
+          </Sheet>
+          <p className="text-4xl">{time}</p>
+        </div>
       </div>
       <div className="flex justify-between">
         <Player />

@@ -10,6 +10,7 @@ interface PlayerState {
   loading: boolean;
 
   togglePlayPause: () => void;
+  setPlaying: (isPlaying: boolean) => void;
   setVolume: (volume: number) => void;
   setImage: () => void;
   nextVideo: () => void;
@@ -47,6 +48,7 @@ export const usePlayerStore = create<PlayerState>((set) => ({
 
   togglePlayPause: () => set((state) => ({ isPlaying: !state.isPlaying })),
   setVolume: (volume: number) => set(() => ({ volume })),
+  setPlaying: (isPlaying: boolean) => set(() => ({ isPlaying })),
   setImage: () => {
     set((state) => {
       let newImage;
