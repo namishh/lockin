@@ -26,7 +26,7 @@ export default function Home() {
   const [time, setTime] = useState(
     new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
   );
-  
+
   useEffect(() => {
     setInterval(() => {
       setTime(
@@ -35,8 +35,8 @@ export default function Home() {
           minute: "2-digit",
         }),
       );
-    }, 1000)
-  })
+    }, 1000);
+  });
 
   return (
     <div className="font-[family-name:var(--font-geist-sans)] flex h-screen w-screen  flex-col justify-between p-8">
@@ -81,7 +81,7 @@ export default function Home() {
           "LOADING"
         ) : (
           <div className="w-full h-full">
-            <div className="absolute w-full top-0 left-0 z-[1] h-full bg-neutral-950/40"></div>
+            <div className="absolute w-full top-0 left-0 z-[1] h-full bg-neutral-950/60"></div>
             <Image
               width={0}
               height={0}

@@ -14,7 +14,7 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Solace Cafe ☕",
+  title: "Lock In Cafe ☕",
   description: "A cozy cafe in the heart of the cracked devs city.",
 };
 
