@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { persist } from "zustand/middleware";
 
 interface PlayerState {
   isPlaying: boolean;
@@ -88,3 +89,108 @@ export const usePlayerStore = create<PlayerState>((set) => ({
     })),
   setLoading: (loading: boolean) => set(() => ({ loading: loading })),
 }));
+
+interface TimerState {
+  duration: number;
+  timeLeft: number;
+  isActive: boolean;
+  lastTickTime: number | null;
+  setDuration: (duration: number) => void;
+  setTimeLeft: (timeLeft: number) => void;
+  setIsActive: (isActive: boolean) => void;
+  increaseDuration: () => void;
+  decreaseDuration: () => void;
+  resetTimer: () => void;
+  tick: () => void;
+}
+
+export const useTimerStore = create<TimerState>()(
+  persist(
+    (set) => ({
+      duration: 25,
+      timeLeft: 25 * 60,
+      isActive: false,
+      lastTickTime: null,
+      setDuration: (duration) => set({ duration, timeLeft: duration * 60 }),
+      setTimeLeft: (timeLeft) => set({ timeLeft }),
+      setIsActive: (isActive) =>
+        set(() => ({
+          isActive,
+          lastTickTime: isActive ? Date.now() : null,
+        })),
+      increaseDuration: () =>
+        set((state) => ({
+          duration: state.duration + 5,
+          timeLeft: state.isActive ? state.timeLeft : (state.duration + 5) * 60,
+        })),
+      decreaseDuration: () =>
+        set((state) => ({
+          duration: state.duration > 5 ? state.duration - 5 : state.duration,
+          timeLeft: state.isActive
+            ? state.timeLeft
+            : (state.duration > 5 ? state.duration - 5 : state.duration) * 60,
+        })),
+      resetTimer: () =>
+        set((state) => ({
+          timeLeft: state.duration * 60,
+          isActive: false,
+          lastTickTime: null,
+        })),
+      tick: () =>
+        set((state) => {
+          if (!state.isActive || state.timeLeft <= 0) {
+            return { isActive: false, lastTickTime: null };
+          }
+
+          const now = Date.now();
+          const elapsed = state.lastTickTime
+            ? (now - state.lastTickTime) / 1000
+            : 0;
+          const newTimeLeft = Math.max(0, state.timeLeft - elapsed);
+
+          return {
+            timeLeft: newTimeLeft,
+            lastTickTime: now,
+            isActive: newTimeLeft > 0,
+          };
+        }),
+    }),
+    {
+      name: "pomo-timer-storage",
+      storage: {
+        getItem: (name) => {
+          const str = localStorage.getItem(name);
+          if (str) return JSON.parse(str);
+          return null;
+        },
+        setItem: (name, value) => {
+          localStorage.setItem(name, JSON.stringify(value));
+        },
+        removeItem: (name) => localStorage.removeItem(name),
+      },
+    },
+  ),
+);
+
+// Create a separate function to handle the timer logic
+const runTimer = () => {
+  const { isActive, timeLeft, tick } = useTimerStore.getState();
+
+  if (isActive && timeLeft > 0) {
+    tick();
+    requestAnimationFrame(runTimer);
+  }
+};
+
+// Start the timer when the app loads
+runTimer();
+
+// Ensure the timer keeps running even if the component unmounts
+if (typeof window !== "undefined") {
+  setInterval(() => {
+    const { isActive } = useTimerStore.getState();
+    if (isActive) {
+      runTimer();
+    }
+  }, 1000);
+}

@@ -1,53 +1,22 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "./ui/button";
+import { useTimerStore } from "@/lib/store"; // Adjust the import path as needed
 
 const PomoTimer: React.FC = () => {
-  const [duration, setDuration] = useState<number>(() => {
-    const savedDuration = localStorage.getItem("pomoDuration");
-    return savedDuration ? parseInt(savedDuration, 10) : 25;
-  });
-  const [timeLeft, setTimeLeft] = useState<number>(duration * 60);
-  const [isActive, setIsActive] = useState<boolean>(false);
-
-  useEffect(() => {
-    let interval: NodeJS.Timeout | null = null;
-
-    if (isActive && timeLeft > 0) {
-      interval = setInterval(() => {
-        setTimeLeft((prev) => prev - 1);
-      }, 1000);
-    } else if (timeLeft === 0) {
-      setIsActive(false);
-    }
-
-    return () => {
-      if (interval) clearInterval(interval);
-    };
-  }, [isActive, timeLeft]);
-
-  useEffect(() => {
-    setTimeLeft(duration * 60);
-    localStorage.setItem("pomoDuration", duration.toString()); // Save duration to localStorage
-  }, [duration]);
-
-  const resetTimer = () => {
-    setTimeLeft(duration * 60);
-    setIsActive(false);
-  };
-
-  const increaseDuration = () => {
-    setDuration((prev) => prev + 5);
-  };
-
-  const decreaseDuration = () => {
-    setDuration((prev) => (prev > 5 ? prev - 5 : prev));
-  };
+  const {
+    timeLeft,
+    isActive,
+    setIsActive,
+    increaseDuration,
+    decreaseDuration,
+    resetTimer,
+  } = useTimerStore();
 
   const formatTime = (seconds: number) => {
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = seconds % 60;
-    return `${minutes < 10 ? "0" : ""}${minutes}:${remainingSeconds < 10 ? "0" : ""}${remainingSeconds}`;
+    return `${minutes < 10 ? "0" : ""}${minutes}:${Number(remainingSeconds.toFixed(0)) < 10 ? "0" : ""}${Number(remainingSeconds.toFixed(0))}`;
   };
 
   return (
@@ -61,14 +30,13 @@ const PomoTimer: React.FC = () => {
           <ChevronRight size={18} />
         </button>
       </div>
-
       <div className="flex space-x-4">
         {isActive ? (
-          <Button variant="secondary" onClick={() => setIsActive(!isActive)}>
+          <Button variant="secondary" onClick={() => setIsActive(false)}>
             Pause
           </Button>
         ) : (
-          <Button variant="outline" onClick={() => setIsActive(!isActive)}>
+          <Button variant="outline" onClick={() => setIsActive(true)}>
             Start
           </Button>
         )}
