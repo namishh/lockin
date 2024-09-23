@@ -58,6 +58,24 @@ export default function Home() {
 
   const [pomo, openPomo] = useState(false);
   const [todo, openTodo] = useState(false);
+  
+  const togglePomo = () => {
+    if (pomo) {
+      openPomo(false);
+    } else {
+      openTodo(false)
+      openPomo(true);
+    }
+  }
+  
+  const toggleTodo = () => {
+    if (todo) {
+      openTodo(false);
+    } else {
+      openPomo(false)
+      openTodo(true);
+    }
+  }
 
   const handleUsernameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newUsername = event.target.value;
@@ -127,7 +145,7 @@ export default function Home() {
           </a>
           <div className="relative">
             <Clock
-              onClick={() => openPomo(!pomo)}
+              onClick={togglePomo}
               size={24}
               className="cursor-pointer"
             />
@@ -135,7 +153,7 @@ export default function Home() {
           </div>
           <div className="relative">
             <List
-              onClick={() => openTodo(!todo)}
+              onClick={toggleTodo}
               size={24}
               className="cursor-pointer"
             />
