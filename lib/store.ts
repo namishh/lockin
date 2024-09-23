@@ -28,7 +28,6 @@ export const usePlayerStore = create<PlayerState>((set) => ({
   loading: true,
   videoIds: [
     "4xDzrJKXOOY", // Synthwave Radio
-    "D58_3HqgRKA", // Purrple Cat Radio
     "jfKfPfyJRdk", // Lofi Hip Hop Radio
     "tGfQYbArQhc", // Jazz Lofi
     "J2i0cZWCdq4", // Study Lofi
@@ -41,7 +40,6 @@ export const usePlayerStore = create<PlayerState>((set) => ({
   ],
   videoNames: [
     "Synthwave Radio - Lofi Girl",
-    "Purrple Cat Radio",
     "Lofi Hip Hop Radio - Lofi Girl",
     "Jazz Lofi - Abao In Tokyo",
     "Study Lofi - Lofi Girl",
