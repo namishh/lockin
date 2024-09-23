@@ -38,7 +38,7 @@ export default function Home() {
     new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
   );
 
-  const [username, setUsername] = useState("loser");
+  const [username, setUsername] = useState("champ");
 
   useEffect(() => {
     const storedUsername = localStorage.getItem("username");
