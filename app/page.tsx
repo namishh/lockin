@@ -10,11 +10,19 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { useEffect, useState } from "react";
-import { Clock, List } from "lucide-react";
+import { Clock, Github, List, Twitter } from "lucide-react";
 import PomoTimer from "@/components/Pomo";
 import Todo from "@/components/Todo";
-
+import { Input } from "@/components/ui/input";
 export default function Home() {
   const {
     image,
@@ -30,7 +38,14 @@ export default function Home() {
     new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
   );
 
+  const [username, setUsername] = useState("loser");
+
   useEffect(() => {
+    const storedUsername = localStorage.getItem("username");
+    if (storedUsername) {
+      setUsername(storedUsername);
+    }
+
     setInterval(() => {
       setTime(
         new Date().toLocaleTimeString([], {
@@ -43,6 +58,12 @@ export default function Home() {
 
   const [pomo, openPomo] = useState(false);
   const [todo, openTodo] = useState(false);
+
+  const handleUsernameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newUsername = event.target.value;
+    setUsername(newUsername);
+    localStorage.setItem("username", newUsername);
+  };
 
   return (
     <div className="font-[family-name:var(--font-geist-sans)] flex h-screen w-screen  flex-col justify-between p-8">
@@ -79,9 +100,31 @@ export default function Home() {
             </SheetContent>
           </Sheet>
           <p className="text-4xl">{time}</p>
-          <p className="text-xl">Time to lock in, loser.</p>
+          <Dialog>
+            <DialogTrigger>
+              <p className="text-xl justify-left text-left">
+                Time to lock in,{" "}
+                <span className="cursor-pointer">{username}</span>.
+              </p>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-[425px]">
+              <DialogHeader>
+                <DialogTitle>Edit username</DialogTitle>
+                <DialogDescription>enter a username here</DialogDescription>
+                <div className="my-6 flex flex-col">
+                  <Input value={username} onChange={handleUsernameChange} />
+                </div>
+              </DialogHeader>
+            </DialogContent>
+          </Dialog>
         </div>
         <div className="flex gap-4">
+          <a href="https://github.com/namishh/lockin">
+            <Github size={24} />
+          </a>
+          <a href="https://x.com/namishh_">
+            <Twitter size={24} />
+          </a>
           <div className="relative">
             <Clock
               onClick={() => openPomo(!pomo)}

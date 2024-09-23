@@ -20,7 +20,7 @@ const PomoTimer: React.FC = () => {
   };
 
   return (
-    <div className="flex absolute top-10 -right-2 flex-col bg-primary items-center justify-center p-4 rounded-lg shadow-lg">
+    <div className="flex absolute top-10 -right-10 flex-col bg-primary items-center justify-center p-4 rounded-lg shadow-lg">
       <div className="flex mb-4 gap-4 items-center">
         <button onClick={decreaseDuration}>
           <ChevronLeft size={18} />
