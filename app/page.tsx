@@ -11,8 +11,9 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { useEffect, useState } from "react";
-import { Clock } from "lucide-react";
+import { Clock, List } from "lucide-react";
 import PomoTimer from "@/components/Pomo";
+import Todo from "@/components/Todo";
 
 export default function Home() {
   const {
@@ -41,6 +42,7 @@ export default function Home() {
   });
 
   const [pomo, openPomo] = useState(false);
+  const [todo, openTodo] = useState(false);
 
   return (
     <div className="font-[family-name:var(--font-geist-sans)] flex h-screen w-screen  flex-col justify-between p-8">
@@ -77,6 +79,7 @@ export default function Home() {
             </SheetContent>
           </Sheet>
           <p className="text-4xl">{time}</p>
+          <p className="text-xl">Time to lock in, loser.</p>
         </div>
         <div className="flex gap-4">
           <div className="relative">
@@ -86,6 +89,14 @@ export default function Home() {
               className="cursor-pointer"
             />
             {pomo && <PomoTimer />}
+          </div>
+          <div className="relative">
+            <List
+              onClick={() => openTodo(!todo)}
+              size={24}
+              className="cursor-pointer"
+            />
+            {todo && <Todo />}
           </div>
         </div>
       </div>
