@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef, useEffect } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "./ui/button";
 import { useTimerStore } from "@/lib/store"; // Adjust the import path as needed
@@ -11,12 +11,33 @@ const PomoTimer: React.FC = () => {
     increaseDuration,
     decreaseDuration,
     resetTimer,
+    playSound,
   } = useTimerStore();
 
   const formatTime = (seconds: number) => {
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = seconds % 60;
     return `${minutes < 10 ? "0" : ""}${minutes}:${Number(remainingSeconds.toFixed(0)) < 10 ? "0" : ""}${Number(remainingSeconds.toFixed(0))}`;
+  };
+
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  useEffect(() => {
+    audioRef.current = new Audio("/notif.mp3");
+  }, []);
+
+  const handleStart = () => {
+    setIsActive(true);
+    playSound();
+  };
+
+  const handlePause = () => {
+    setIsActive(false);
+  };
+
+  const handleReset = () => {
+    resetTimer();
+    playSound();
   };
 
   return (
@@ -32,15 +53,15 @@ const PomoTimer: React.FC = () => {
       </div>
       <div className="flex space-x-4">
         {isActive ? (
-          <Button variant="secondary" onClick={() => setIsActive(false)}>
+          <Button variant="secondary" onClick={handlePause}>
             Pause
           </Button>
         ) : (
-          <Button variant="outline" onClick={() => setIsActive(true)}>
+          <Button variant="outline" onClick={handleStart}>
             Start
           </Button>
         )}
-        <Button variant="destructive" onClick={resetTimer}>
+        <Button variant="destructive" onClick={handleReset}>
           Reset
         </Button>
       </div>

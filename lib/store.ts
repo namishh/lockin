@@ -100,22 +100,33 @@ interface TimerState {
   decreaseDuration: () => void;
   resetTimer: () => void;
   tick: () => void;
+  playSound: () => void;
 }
 
 export const useTimerStore = create<TimerState>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       duration: 25,
       timeLeft: 25 * 60,
       isActive: false,
       lastTickTime: null,
+      playSound: () => {
+        const audio = new Audio("/notif.mp3");
+        audio
+          .play()
+          .catch((error) => console.error("Error playing sound:", error));
+      },
       setDuration: (duration) => set({ duration, timeLeft: duration * 60 }),
       setTimeLeft: (timeLeft) => set({ timeLeft }),
-      setIsActive: (isActive) =>
+      setIsActive: (isActive) => {
         set(() => ({
           isActive,
           lastTickTime: isActive ? Date.now() : null,
-        })),
+        }));
+        if (isActive) {
+          get().playSound();
+        }
+      },
       increaseDuration: () =>
         set((state) => ({
           duration: state.duration + 5,
@@ -137,15 +148,16 @@ export const useTimerStore = create<TimerState>()(
       tick: () =>
         set((state) => {
           if (!state.isActive || state.timeLeft <= 0) {
+            if (state.isActive && state.timeLeft <= 0) {
+              get().playSound(); // Play sound when timer ends
+            }
             return { isActive: false, lastTickTime: null };
           }
-
           const now = Date.now();
           const elapsed = state.lastTickTime
             ? (now - state.lastTickTime) / 1000
             : 0;
           const newTimeLeft = Math.max(0, state.timeLeft - elapsed);
-
           return {
             timeLeft: newTimeLeft,
             lastTickTime: now,
