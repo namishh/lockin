@@ -147,21 +147,28 @@ export const useTimerStore = create<TimerState>()(
         })),
       tick: () =>
         set((state) => {
-          if (!state.isActive || state.timeLeft <= 0) {
-            if (state.isActive && state.timeLeft <= 0) {
-              get().playSound(); // Play sound when timer ends
-            }
-            return { isActive: false, lastTickTime: null };
+          if (!state.isActive) {
+            return state;
           }
+
           const now = Date.now();
           const elapsed = state.lastTickTime
             ? (now - state.lastTickTime) / 1000
             : 0;
           const newTimeLeft = Math.max(0, state.timeLeft - elapsed);
+
+          if (newTimeLeft <= 0) {
+            get().playSound(); 
+            return {
+              timeLeft: state.duration * 60,
+              isActive: false,
+              lastTickTime: null,
+            };
+          }
+
           return {
             timeLeft: newTimeLeft,
             lastTickTime: now,
-            isActive: newTimeLeft > 0,
           };
         }),
     }),

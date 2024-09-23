@@ -46,7 +46,9 @@ const PomoTimer: React.FC = () => {
         <button onClick={decreaseDuration}>
           <ChevronLeft size={18} />
         </button>
-        <div className="text-3xl font-bold">{formatTime(timeLeft)}</div>
+        <div className="text-4xl font-mono font-bold">
+          {formatTime(timeLeft)}
+        </div>
         <button onClick={increaseDuration} className="">
           <ChevronRight size={18} />
         </button>

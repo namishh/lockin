@@ -58,24 +58,24 @@ export default function Home() {
 
   const [pomo, openPomo] = useState(false);
   const [todo, openTodo] = useState(false);
-  
+
   const togglePomo = () => {
     if (pomo) {
       openPomo(false);
     } else {
-      openTodo(false)
+      openTodo(false);
       openPomo(true);
     }
-  }
-  
+  };
+
   const toggleTodo = () => {
     if (todo) {
       openTodo(false);
     } else {
-      openPomo(false)
+      openPomo(false);
       openTodo(true);
     }
-  }
+  };
 
   const handleUsernameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newUsername = event.target.value;
@@ -128,7 +128,10 @@ export default function Home() {
             <DialogContent className="sm:max-w-[425px]">
               <DialogHeader>
                 <DialogTitle>Edit username</DialogTitle>
-                <DialogDescription>enter a username here</DialogDescription>
+                <DialogDescription>
+                  Enter any name/nickname. All of it is only stored in local
+                  storage.
+                </DialogDescription>
                 <div className="my-6 flex flex-col">
                   <Input value={username} onChange={handleUsernameChange} />
                 </div>
@@ -144,19 +147,11 @@ export default function Home() {
             <Twitter size={24} />
           </a>
           <div className="relative">
-            <Clock
-              onClick={togglePomo}
-              size={24}
-              className="cursor-pointer"
-            />
+            <Clock onClick={togglePomo} size={24} className="cursor-pointer" />
             {pomo && <PomoTimer />}
           </div>
           <div className="relative">
-            <List
-              onClick={toggleTodo}
-              size={24}
-              className="cursor-pointer"
-            />
+            <List onClick={toggleTodo} size={24} className="cursor-pointer" />
             {todo && <Todo />}
           </div>
         </div>
