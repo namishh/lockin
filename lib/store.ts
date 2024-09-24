@@ -18,9 +18,10 @@ interface PlayerState {
   setVideo: (videoId: number) => void;
   previousVideo: () => void;
   setLoading: (loading: boolean) => void;
+  applyVolumeToPlayer: (player: HTMLIFrameElement | null) => void;
 }
 
-export const usePlayerStore = create<PlayerState>((set) => ({
+export const usePlayerStore = create<PlayerState>((set, get) => ({
   isPlaying: false,
   volume: 100,
   image: 1,
@@ -63,29 +64,44 @@ export const usePlayerStore = create<PlayerState>((set) => ({
       return { image: newImage };
     });
   },
-  nextVideo: () =>
-    set((state) => ({
-      currentVideoId:
-        state.currentVideoId >= state.videoIds.length - 1
-          ? 0
-          : state.currentVideoId + 1,
-      isPlaying: true,
-    })),
 
-  setVideo: (videoId: number) =>
+  setVideo: (videoId: number) => {
     set(() => ({
       currentVideoId: videoId,
-    })),
+    }));
 
-  previousVideo: () =>
-    set((state) => ({
-      currentVideoId:
-        state.currentVideoId === 0
-          ? state.videoIds.length - 1
-          : state.currentVideoId - 1,
-      isPlaying: true,
-    })),
+    const { setVolume } = get();
+    setVolume(100)
+  },
+
+  previousVideo: () => {
+    const { currentVideoId, videoIds, setPlaying, setVolume } = get();
+    const prevId =
+      currentVideoId === 0 ? videoIds.length - 1 : currentVideoId - 1;
+    set({ currentVideoId: prevId });
+    setPlaying(true);
+    setVolume(100);
+  },
+
+  nextVideo: () => {
+    const { currentVideoId, videoIds, setPlaying, setVolume } = get();
+    const nextId =
+      currentVideoId >= videoIds.length - 1 ? 0 : currentVideoId + 1;
+    set({ currentVideoId: nextId });
+    setPlaying(true);
+    setVolume(100);
+  },
+
   setLoading: (loading: boolean) => set(() => ({ loading: loading })),
+  applyVolumeToPlayer: (player: HTMLIFrameElement | null) => {
+    const { volume } = get();
+    if (player && player.contentWindow) {
+      player.contentWindow.postMessage(
+        `{"event":"command","func":"setVolume","args":[${volume}]}`,
+        "*",
+      );
+    }
+  },
 }));
 
 interface TimerState {
@@ -158,7 +174,7 @@ export const useTimerStore = create<TimerState>()(
           const newTimeLeft = Math.max(0, state.timeLeft - elapsed);
 
           if (newTimeLeft <= 0) {
-            get().playSound(); 
+            get().playSound();
             return {
               timeLeft: state.duration * 60,
               isActive: false,
